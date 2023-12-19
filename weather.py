@@ -4,16 +4,18 @@ from configparser import ConfigParser
 import PIL.Image
 import PIL.ImageTk
 import requests
-import os
 
-url = 'http://api.openweathermap.org/data/2.5/weather?q={}&appid={}'
+url = 'https://api.openweathermap.org/data/2.5/weather?q={}&appid={}'
 
 config_file = 'config.ini'
 config = ConfigParser()
 config.read(config_file)
 api_key = config['api_key']['key']
 
+
 # retrieving the information from the given json in a formatted manner
+
+
 def get_weather(city):
     result = requests.get(url.format(city, api_key))
     if result:
@@ -36,8 +38,10 @@ def get_weather(city):
         visibility = json['visibility']
         wind_speed_meters_per_second = json['wind']['speed']
         wind_speed_kilometers_per_hour = wind_speed_meters_per_second * 3.6
-        final = (city, country, temp_celsius, temp_fahrenheit, icon, weather, min_temp_celsius, min_temp_fahrenheit,
-                 max_temp_celsius, max_temp_fahrenheit, description, visibility, wind_speed_kilometers_per_hour)
+        final = (city, country, temp_celsius, temp_fahrenheit, icon,
+                 weather, min_temp_celsius, min_temp_fahrenheit,
+                 max_temp_celsius, max_temp_fahrenheit, description,
+                 visibility, wind_speed_kilometers_per_hour)
         return final
 
     else:
@@ -57,13 +61,20 @@ def search():
 
         weather_icon['image'] = render
         weather_icon.image_ref = render
-        temperature_label['text'] = 'The current temperature is: {:.2f}°C, {:.2f}°F'.format(weather[2], weather[3])
+        temperature_label['text'] = \
+            ('The current temperature is: {:.2f}°C, {:.2f}°F'.
+             format(weather[2], weather[3]))
+
         weather_label['text'] = weather[5]
-        minimum_temp['text'] = ' Low of {:.2f}°C, {:.2f}°F'.format(weather[6], weather[7])
-        maximum_temp['text'] = 'High of {:.2f}°C, {:.2f}°F'.format(weather[8], weather[9])
+        minimum_temp['text'] = (' Low of {:.2f}°C, {:.2f}°F'.
+                                format(weather[6], weather[7]))
+        maximum_temp['text'] = ('High of {:.2f}°C, {:.2f}°F'.
+                                format(weather[8], weather[9]))
         weather_description['text'] = weather[10]
-        weather_visibility['text'] = 'The current visibility is {:} meters '.format(weather[11])
-        current_wind_speed['text'] = 'The wind speed is {:.1f} km/h'.format(weather[12])
+        weather_visibility['text'] = ('The current visibility is {:} meters '.
+                                      format(weather[11]))
+        current_wind_speed['text'] = ('The wind speed is {:.1f} km/h'.
+                                      format(weather[12]))
     else:
         messagebox.showerror('Error', 'Cannot find the city {}'.format(city))
 
@@ -82,9 +93,10 @@ city_entry = Entry(app, textvariable=city_text)
 
 city_entry.pack()
 
-#search button
+# search button
 
-city_weather_search_button = Button(app, text='Search Weather', width=12, command=search)
+city_weather_search_button = Button(app, text='Search Weather',
+                                    width=12, command=search)
 city_weather_search_button.pack()
 
 # all the labels which appear when a query is entered
